@@ -30,11 +30,6 @@ def clock_positions(center=(200,200), radius=100):
         positions[str(i)] = (x,y)
     return positions
 
-def correct_hand_angles(hour=10, minute=10):
-    hour_angle = math.radians((hour%12-3)*30 + (minute/60)*30)
-    minute_angle = math.radians((minute-15)*6)
-    return hour_angle, minute_angle
-
 # ---------- Initialize Session State ----------
 if "task_count" not in st.session_state:
     st.session_state.task_count = 0
@@ -100,8 +95,7 @@ if st.button("Submit Drawing"):
     hand_score = 0
 
     if task_type == "Clock":
-        # Ask user for numbers (simulate placement)
-        numbers_input = st.text_input("Enter placed numbers separated by comma (e.g., 1,2,3,...):", "1,2,3,4,5,6,7,8,9,10,11,12")
+        numbers_input = st.text_input("Enter placed numbers separated by comma (1-12):", "1,2,3,4,5,6,7,8,9,10,11,12")
         user_numbers = [n.strip() for n in numbers_input.split(",") if n.strip().isdigit()]
         correct_numbers = [str(i) for i in range(1,13)]
         missing_numbers = [n for n in correct_numbers if n not in user_numbers]
