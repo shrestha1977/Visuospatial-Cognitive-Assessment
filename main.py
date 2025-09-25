@@ -53,9 +53,8 @@ if not os.path.exists(report_file):
 
 st.title("🧠 Visuospatial Cognitive Assessment Suite")
 
-# ---------- Select Task ----------
+# ---------- Check if all tasks completed ----------
 if st.session_state.task_count >= TOTAL_TASKS:
-    # ---------- Final Report ----------
     avg_score = sum(st.session_state.all_scores)/len(st.session_state.all_scores)
     if avg_score < 60:
         risk = "High"
@@ -67,7 +66,7 @@ if st.session_state.task_count >= TOTAL_TASKS:
     st.write(f"Average Score: {avg_score:.2f}%")
     st.write(f"Overall Cognitive Risk: {risk}")
 
-    # Save report
+    # Save final report
     df_report = pd.DataFrame([[st.session_state.task_count, round(avg_score,2), risk]],
                              columns=["Task_Count","Average_Score","Overall_Risk"])
     df_report.to_csv(report_file, mode='a', header=False, index=False)
@@ -91,7 +90,7 @@ canvas_result = st_canvas(
     key="canvas"
 )
 
-# ---------- Evaluate Button ----------
+# ---------- Submit Drawing ----------
 if st.button("Submit Drawing"):
     time_taken = time.time() - st.session_state.start_time
     task_type = st.session_state.current_task
@@ -106,17 +105,15 @@ if st.button("Submit Drawing"):
         user_numbers = [n.strip() for n in numbers_input.split(",") if n.strip().isdigit()]
         correct_numbers = [str(i) for i in range(1,13)]
         missing_numbers = [n for n in correct_numbers if n not in user_numbers]
-        misplaced_numbers = []  # Could add more advanced check with coordinates
         score += max(0, 12 - len(missing_numbers))
-        # Hand score (simplified)
         hand_score = st.slider("Rate hands placement (0-2)", 0, 2, 2)
         score += hand_score
         max_score = 14
         final_score = (score/max_score)*100
     else:
-        # Shape copying
         st.write("Shape drawing submitted. Score will be approximated.")
-        final_score = random.randint(60,100)  # For demo, approximate
+        final_score = random.randint(60,100)  # Approximation for demo
+
     st.write(f"Task Score: {final_score:.2f}%")
     st.session_state.all_scores.append(final_score)
 
@@ -125,13 +122,10 @@ if st.button("Submit Drawing"):
                              columns=["Task_Type","Score","Time_seconds","Missing_Numbers","Misplaced_Numbers","Hand_Score"])
     df_result.to_csv(results_file, mode='a', header=False, index=False)
 
-    # Prepare next task
-   # Prepare next task
-st.session_state.task_count += 1
-st.session_state.current_task = None
-st.success("Drawing submitted! Click 'Next Task' to continue.")
+    st.success("Drawing submitted! Click 'Next Task' to continue.")
+
+# ---------- Next Task Button ----------
 if st.button("Next Task"):
     st.session_state.current_task = None
     st.session_state.start_time = time.time()
     st.experimental_rerun()
-
