@@ -1,5 +1,5 @@
 streamlit
 streamlit-drawable-canvas
 numpy
-opencv-python
 pandas
+opencv-python-headless
