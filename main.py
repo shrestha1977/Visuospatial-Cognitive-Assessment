@@ -122,4 +122,4 @@ if st.button("Submit Drawing"):
 if st.button("Next Task"):
     st.session_state.current_task = None
     st.session_state.start_time = time.time()
-    st.experimental_rerun()
+    st.success("Next task loaded! Start drawing now.")
