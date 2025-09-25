@@ -126,6 +126,12 @@ if st.button("Submit Drawing"):
     df_result.to_csv(results_file, mode='a', header=False, index=False)
 
     # Prepare next task
-    st.session_state.task_count += 1
+   # Prepare next task
+st.session_state.task_count += 1
+st.session_state.current_task = None
+st.success("Drawing submitted! Click 'Next Task' to continue.")
+if st.button("Next Task"):
     st.session_state.current_task = None
+    st.session_state.start_time = time.time()
     st.experimental_rerun()
+
