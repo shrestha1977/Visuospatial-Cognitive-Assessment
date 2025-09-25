@@ -116,10 +116,12 @@ if st.button("Submit Drawing"):
                              columns=["Task_Type","Score","Time_seconds","Missing_Numbers","Misplaced_Numbers","Hand_Score"])
     df_result.to_csv(results_file, mode='a', header=False, index=False)
 
-    st.success("Drawing submitted! Click 'Next Task' to continue.")
-
-# ---------- Next Task Button ----------
-if st.button("Next Task"):
-    st.session_state.current_task = None
-    st.session_state.start_time = time.time()
-    st.success("Next task loaded! Start drawing now.")
+    # ---------- Prepare Next Task ----------
+    st.session_state.task_count += 1
+    if st.session_state.task_count < TOTAL_TASKS:
+        st.session_state.current_task = random.choice(list(shapes.keys()))
+        st.session_state.start_time = time.time()
+        st.success(f"Task submitted! Now starting Task {st.session_state.task_count+1}.")
+    else:
+        st.session_state.current_task = None
+        st.success("All tasks completed! Scroll down for the final report.")
