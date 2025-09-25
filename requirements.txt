@@ -1,5 +1,6 @@
 streamlit
 streamlit-drawable-canvas
-numpy
-pandas
 opencv-python-headless
+easyocr
+numpy
+pillow
